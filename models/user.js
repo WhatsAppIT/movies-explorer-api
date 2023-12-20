@@ -23,9 +23,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       select: false,
+      minlength: [8, "В пароле минимум 8 символов"],
     },
   },
   { versionKey: false, timestamps: true }
 );
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("user", userSchema);

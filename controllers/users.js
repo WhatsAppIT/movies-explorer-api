@@ -1,8 +1,6 @@
 const User = require("../models/user");
 const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
-//const RepetError = require("../errors/RepetError");
-//const SigninError = require("../errors/SigninError");
 
 const getProfile = (req, res, next) => {
   User.findById(req.user._id)
@@ -21,9 +19,7 @@ const getProfile = (req, res, next) => {
         );
       }
 
-      return next(
-        `Произола ошибка ${err.name} при получении данных пользователя`
-      );
+      return next(err);
     });
 };
 
@@ -55,9 +51,7 @@ const patchUpdateProfile = (req, res, next) => {
         );
       }
 
-      return next(
-        `Произола ошибка ${err.name} при обновлении данных пользователя`
-      );
+      return next(err);
     });
 };
 

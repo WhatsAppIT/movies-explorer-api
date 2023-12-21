@@ -1,11 +1,8 @@
 const Movie = require("../models/movie");
-//const bcrypt = require("bcryptjs");
 
 const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
 const DeleteMovieError = require("../errors/DeleteMovieError");
-//const RepetError = require("../errors/RepetError");
-//const SigninError = require("../errors/SigninError");
 
 const getAllSavedMovie = (req, res, next) => {
   Movie.find({ owner: req.user._id })

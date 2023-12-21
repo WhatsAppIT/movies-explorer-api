@@ -8,6 +8,7 @@ const { PORT = 3000, MONGO_URL = "mongodb://127.0.0.1:27017/bitfilmsdb" } =
   process.env;
 
 const routerUsers = require("./routes/users");
+const routerMovies = require("./routes/movies");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/users", routerUsers);
+app.use("/movies", routerMovies);
 
 async function init() {
   await mongoose.connect(MONGO_URL);

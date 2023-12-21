@@ -1,14 +1,14 @@
 const User = require("../models/user");
 const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
-const RepetError = require("../errors/RepetError");
-const SigninError = require("../errors/SigninError");
+//const RepetError = require("../errors/RepetError");
+//const SigninError = require("../errors/SigninError");
 
 const getProfile = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw NotFoundError("Нет пользователя с таким id U/C");
+        throw new NotFoundError("Нет пользователя с таким id U/C");
       }
       return res.send(user);
     })
@@ -27,4 +27,38 @@ const getProfile = (req, res, next) => {
     });
 };
 
-module.exports = { getProfile };
+const patchUpdateProfile = (req, res, next) => {
+  const { name, email } = req.body;
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, email },
+    {
+      new: true,
+      runValidators: true,
+      upsert: true,
+    }
+  )
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError("Нет пользователя с таким id U/C");
+      }
+
+      return res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return next(
+          new ValidationError(
+            "Переданы некорректные данные при поиске пользователя."
+          )
+        );
+      }
+
+      return next(
+        `Произола ошибка ${err.name} при обновлении данных пользователя`
+      );
+    });
+};
+
+module.exports = { getProfile, patchUpdateProfile };

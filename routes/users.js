@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { getProfile, patchUpdateProfile } = require("../controllers/users");
-
-router.use("/me", getProfile);
-router.use("/me", patchUpdateProfile);
+//console.log(patchUpdateProfile);
+router.get("/me", getProfile);
+router.patch("/me", patchUpdateProfile);
 
 module.exports = router;

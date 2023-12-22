@@ -5,7 +5,7 @@ const NotFoundError = require("../errors/NotFoundError");
 const DeleteMovieError = require("../errors/DeleteMovieError");
 
 const getAllSavedMovie = (req, res, next) => {
-  Movie.find({ owner: req.user._id })
+  Movie.find({ owner: req.body._id })
     .then((movies) => {
       if (!movies) {
         throw new NotFoundError("Нет сохраненных фильмов. M/C");
@@ -44,7 +44,7 @@ const postMovie = (req, res, next) => {
     nameEN,
     thumbnail,
     movieId,
-    owner: req.user._id,
+    owner: req.body._id,
   })
     .then((movie) => {
       if (!movie) {
@@ -64,9 +64,10 @@ const postMovie = (req, res, next) => {
 };
 
 const deleteMovieById = (req, res, next) => {
-  const owner = req.user._id;
+  const owner = req.body._id;
 
-  Movie.findById(req.params.id)
+  Movie.findById(req.params.movieId)
+
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError("Фильм по указанному _id не найден.");
@@ -74,11 +75,12 @@ const deleteMovieById = (req, res, next) => {
       if (movie.owner.toString() !== owner) {
         throw new DeleteMovieError("Нельзя удалить фильм.");
       }
+
       return Movie.deleteOne(movie);
     })
-    /*     .then(() => {
-      res.send();
-    }) */
+    .then((myMovie) => {
+      res.send(myMovie);
+    })
     .catch((err) => {
       if (err.name === "CastError") {
         return next(

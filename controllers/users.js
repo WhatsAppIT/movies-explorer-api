@@ -3,11 +3,15 @@ const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
 
 const getProfile = (req, res, next) => {
-  User.findById(req.user._id)
+  //const { _id } = req.body;
+  //console.log(req);
+
+  User.findById(req.body._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError("Нет пользователя с таким id U/C");
       }
+      //console.log(user);
       return res.send(user);
     })
     .catch((err) => {
@@ -24,22 +28,22 @@ const getProfile = (req, res, next) => {
 };
 
 const patchUpdateProfile = (req, res, next) => {
+  //console.log(req);
   const { name, email } = req.body;
 
   User.findByIdAndUpdate(
-    req.user._id,
+    req.body._id,
     { name, email },
     {
       new: true,
       runValidators: true,
-      upsert: true,
     }
   )
     .then((user) => {
       if (!user) {
         throw new NotFoundError("Нет пользователя с таким id U/C");
       }
-
+      console.log(user);
       return res.send(user);
     })
     .catch((err) => {

@@ -1,6 +1,8 @@
 const router = require("express").Router();
+//const { celebrate, Joi } = require("celebrate");
+//const { linkRegex } = require("../utils/constants");
 const { getProfile, patchUpdateProfile } = require("../controllers/users");
-//console.log(patchUpdateProfile);
+
 router.get("/me", getProfile);
 router.patch("/me", patchUpdateProfile);
 

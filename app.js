@@ -23,11 +23,11 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://krivolapov.nomoredomainsmonster.ru",
-      "http://krivolapov.nomoredomainsmonster.ru",
+      "https://bitfilm.nomoredomainsmonster.ru",
+      "http://bitfilm.nomoredomainsmonster.ru",
       "http://localhost:3000",
-      "https://api.krivolapov.nomoredomainsmonster.ru",
-      "http://api.krivolapov.nomoredomainsmonster.ru",
+      "https://api.bitfilm.nomoredomainsmonster.ru",
+      "http://api.bitfilm.nomoredomainsmonster.ru",
       "http://localhost:3001",
     ],
     credentials: true,

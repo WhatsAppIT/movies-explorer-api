@@ -18,11 +18,12 @@ router.post(
       year: Joi.string().required(),
       description: Joi.string().required(),
       image: Joi.string().required().regex(linkRegex),
-      trailer: Joi.string().required().regex(linkRegex),
+      trailerLink: Joi.string().required().regex(linkRegex),
       nameRU: Joi.string().required(),
       nameEN: Joi.string().required(),
       thumbnail: Joi.string().required().regex(linkRegex),
       movieId: Joi.number().integer().required(),
+      owner: Joi.string().length(24).hex(),
     }),
   }),
   postMovie

@@ -5,11 +5,8 @@ const NotFoundError = require("../errors/NotFoundError");
 const DeleteMovieError = require("../errors/DeleteMovieError");
 
 const getAllSavedMovie = (req, res, next) => {
-  Movie.find({ owner: req.body._id })
+  Movie.find({ owner: req.user._id })
     .then((movies) => {
-      if (!movies) {
-        throw new NotFoundError("Нет сохраненных фильмов. M/C");
-      }
       return res.send(movies);
     })
     .catch((err) => {
@@ -25,12 +22,14 @@ const postMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
     movieId,
   } = req.body;
+
+  const owner = req.user._id;
 
   Movie.create({
     country,
@@ -39,24 +38,17 @@ const postMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
     movieId,
-    owner: req.body._id,
+    owner,
   })
-    .then((movie) => {
-      if (!movie) {
-        throw new NotFoundError("Нет сохраненных фильмов. M/C");
-      }
-      return res.send(movie);
-    })
+    .then((movie) => res.status(201).send(movie))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return next(
-          new ValidationError("Переданы некорректные данные при поиске фильма.")
-        );
+        return next(new ValidationError(err.message));
       }
 
       return next(err);
@@ -64,9 +56,9 @@ const postMovie = (req, res, next) => {
 };
 
 const deleteMovieById = (req, res, next) => {
-  const owner = req.body._id;
+  const owner = req.user._id;
 
-  Movie.findById(req.params.movieId)
+  Movie.findById(req.params.id)
 
     .then((movie) => {
       if (!movie) {
@@ -84,9 +76,7 @@ const deleteMovieById = (req, res, next) => {
     .catch((err) => {
       if (err.name === "CastError") {
         return next(
-          new ValidationError(
-            "Переданы некорректные данные при поиске карточки."
-          )
+          new ValidationError("Переданы некорректные данные при поиске фильма.")
         );
       }
       return next(err);

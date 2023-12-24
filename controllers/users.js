@@ -70,7 +70,7 @@ const postUser = (req, res, next) => {
 };
 
 const getProfile = (req, res, next) => {
-  User.findById(req.body._id)
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError("Нет пользователя с таким id U/C");
@@ -95,7 +95,7 @@ const patchUpdateProfile = (req, res, next) => {
   const { name, email } = req.body;
 
   User.findByIdAndUpdate(
-    req.body._id,
+    req.user._id,
     { name, email },
     {
       new: true,

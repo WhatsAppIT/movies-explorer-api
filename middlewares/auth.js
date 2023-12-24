@@ -10,7 +10,7 @@ const auth = (req, res, next) => {
     throw new SigninError('Необходима авторизация 777888');
   }
 
-  const token = authorization.replace('Bearer ', '');
+  const token = authorization.replace("Bearer ", "");
   let payload;
 
   try {

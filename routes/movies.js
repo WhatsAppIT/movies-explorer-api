@@ -1,15 +1,15 @@
-const router = require("express").Router();
-const { celebrate, Joi } = require("celebrate");
-const { linkRegex } = require("../utils/constants");
+const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
+const { linkRegex } = require('../utils/constants');
 const {
   getAllSavedMovie,
   postMovie,
   deleteMovieById,
-} = require("../controllers/movies");
+} = require('../controllers/movies');
 
-router.get("/", getAllSavedMovie);
+router.get('/', getAllSavedMovie);
 router.post(
-  "/",
+  '/',
   celebrate({
     body: Joi.object().keys({
       country: Joi.string().required(),
@@ -26,16 +26,16 @@ router.post(
       owner: Joi.string().length(24).hex(),
     }),
   }),
-  postMovie
+  postMovie,
 );
 router.delete(
-  "/:id",
+  '/:id',
   celebrate({
     params: Joi.object().keys({
       id: Joi.string().length(24).hex(),
     }),
   }),
-  deleteMovieById
+  deleteMovieById,
 );
 
 module.exports = router;

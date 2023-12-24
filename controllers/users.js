@@ -1,32 +1,34 @@
-require("dotenv").config();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+require('dotenv').config();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
 const { JWT_SECRET, NODE_ENV } = process.env;
-const ValidationError = require("../errors/ValidationError");
-const NotFoundError = require("../errors/NotFoundError");
-const SigninError = require("../errors/SigninError");
+const ValidationError = require('../errors/ValidationError');
+const NotFoundError = require('../errors/NotFoundError');
+const SigninError = require('../errors/SigninError');
+const RepetError = require('../errors/RepetError');
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
   User.findOne({ email })
-    .select("+password")
+    .select('+password')
     .then((user) => {
       if (!user) {
-        throw new SigninError("Неправильные логин или пароль c u login");
+        throw new SigninError('Неправильные логин или пароль c u login');
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          throw new SigninError("Неправильные логин или пароль c u login");
+          throw new SigninError('Неправильные логин или пароль c u login');
         }
         const token = jwt.sign(
           { _id: user._id },
-          NODE_ENV === "production" ? JWT_SECRET : "dev-secret",
+          NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
           {
-            expiresIn: "7d",
-          }
+            expiresIn: '7d',
+          },
         );
         res.send({ token });
       });
@@ -54,15 +56,15 @@ const postUser = (req, res, next) => {
         });
       })
       .catch((err) => {
-        if (err.name === "ValidationError") {
+        if (err.name === 'ValidationError') {
           return next(
             new ValidationError(
-              "Переданы некорректные данные при создании пользователя."
-            )
+              'Переданы некорректные данные при создании пользователя.',
+            ),
           );
         }
         if (err.code === 11000) {
-          return next(new RepetError("Такаой email уже зарегистрирован c u."));
+          return next(new RepetError('Такаой email уже зарегистрирован c u.'));
         }
         return next(err);
       });
@@ -73,17 +75,17 @@ const getProfile = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Нет пользователя с таким id U/C");
+        throw new NotFoundError('Нет пользователя с таким id U/C');
       }
 
       return res.send(user);
     })
     .catch((err) => {
-      if (err.name === "CastError") {
+      if (err.name === 'CastError') {
         return next(
           new ValidationError(
-            "Переданы некорректные данные при поиске пользователя."
-          )
+            'Переданы некорректные данные при поиске пользователя.',
+          ),
         );
       }
 
@@ -100,21 +102,21 @@ const patchUpdateProfile = (req, res, next) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Нет пользователя с таким id U/C");
+        throw new NotFoundError('Нет пользователя с таким id U/C');
       }
       console.log(user);
       return res.send(user);
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         return next(
           new ValidationError(
-            "Переданы некорректные данные при поиске пользователя."
-          )
+            'Переданы некорректные данные при поиске пользователя.',
+          ),
         );
       }
 
@@ -122,4 +124,9 @@ const patchUpdateProfile = (req, res, next) => {
     });
 };
 
-module.exports = { getProfile, patchUpdateProfile, login, postUser };
+module.exports = {
+  getProfile,
+  patchUpdateProfile,
+  login,
+  postUser,
+};

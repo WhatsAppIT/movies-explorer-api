@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const mongoose = require('mongoose');
+const validator = require('validator');
 
 const movieSchema = new mongoose.Schema(
   {
@@ -28,7 +28,7 @@ const movieSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator: (url) => validator.isURL(url),
-        message: "Не корректный URL-адрес",
+        message: 'Не корректный URL-адрес',
       },
     },
     trailerLink: {
@@ -36,7 +36,7 @@ const movieSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator: (url) => validator.isURL(url),
-        message: "Не корректный URL-адрес",
+        message: 'Не корректный URL-адрес',
       },
     },
     thumbnail: {
@@ -44,12 +44,12 @@ const movieSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator: (url) => validator.isURL(url),
-        message: "Не корректный URL-адрес",
+        message: 'Не корректный URL-адрес',
       },
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
       required: true,
     },
     movieId: {
@@ -69,7 +69,7 @@ const movieSchema = new mongoose.Schema(
       default: Date.now,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true },
 );
 
-module.exports = mongoose.model("movie", movieSchema);
+module.exports = mongoose.model('movie', movieSchema);

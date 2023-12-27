@@ -23,7 +23,6 @@ router.post(
       nameEN: Joi.string().required(),
       thumbnail: Joi.string().required().regex(linkRegex),
       movieId: Joi.number().integer().required(),
-      owner: Joi.string().length(24).hex(),
     }),
   }),
   postMovie,

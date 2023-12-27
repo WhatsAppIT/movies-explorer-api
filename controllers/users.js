@@ -112,6 +112,9 @@ const patchUpdateProfile = (req, res, next) => {
       return res.send(user);
     })
     .catch((err) => {
+      if (err.code === 11000) {
+        return next(new RepetError('Такаой email уже зарегистрирован c u.'));
+      }
       if (err.name === 'ValidationError') {
         return next(
           new ValidationError(

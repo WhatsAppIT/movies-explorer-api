@@ -108,7 +108,6 @@ const patchUpdateProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id U/C');
       }
-      console.log(user);
       return res.send(user);
     })
     .catch((err) => {
